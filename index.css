@@ -1,9 +1,50 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    padding: 2rem;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .partyPlanner {
-    margin: 5px;
-    
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+main {
+    display: flex;
+    gap: 3rem;
+}
+
+section {
+    flex: 1;
+}
+
+h2 {
+    margin-bottom: 1rem;
+}
+
+.party {
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    border: 1px solid lightgray;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.party:hover {
+    background-color: #f5f5f5;
+}
+
+#partyDetails {
+    padding: 1rem;
+    border: 1px solid lightgray;
+    border-radius: 4px;
+}
+
+#partyDetails p {
+    margin-top: 0.75rem;
 }
