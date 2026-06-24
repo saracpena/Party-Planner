@@ -1,11 +1,15 @@
 // State
+// parties holds the full list from the API.
+// selectedParty starts as null because nothing has been clicked yet.
 let parties = [];
 let selectedParty = null;
 
 // DOM
+// This is the main container where we will build the whole app. i.e.  <div id="app"></div>
 const app = document.querySelector("#app");
 
 // Render
+// Uses the current state to rebuild what the user sees on the page.
 const render = () => {
   app.innerHTML = `
     <h1 class="partyPlanner">Party Planner</h1>
@@ -37,7 +41,7 @@ const render = () => {
   `;
 };
 
-//GET THE PARTIES
+//GET THE PARTIES, Gets the full list of parties from the API, saves it to state, and then rerenders the page.
 const fetchParties = async () => {
     try {
         console.log("Fetching parties...")
@@ -52,6 +56,8 @@ const fetchParties = async () => {
 };
 
 //WHEN USER CLICKS ON A PARTY RENDER ITS INFO
+// Gets one party by its id,
+// saves it as the selected party.
 app.addEventListener("click", async (event) => {
     if (event.target.classList.contains("party")) {
         const id = event.target.dataset.partyid;
@@ -60,7 +66,8 @@ app.addEventListener("click", async (event) => {
     }
 });
 
-//Identify EACH Party by its ID
+// Gets one party by its id,
+// saves it as the selected party.
 const fetchSelectedParty = async (id) => {
     try {
         const response = await fetch(`https://fsa-crud-2aa9294fe819.herokuapp.com/api/COHORT_CODE/events/${id}`);
@@ -72,12 +79,10 @@ const fetchSelectedParty = async (id) => {
     }
 };
 
+// Starts the app by fetching the party list.
 const init = async () => {
    await fetchParties();
     render();
 };
 
 init();
-
-// render();
-// fetchParties();
