@@ -7,48 +7,77 @@ const app = document.querySelector("#app");
 
 // Render
 const render = () => {
-    const html = parties.map((party) => {
-        return  `<h1 class="partyPlanner">Party Planner</h1>
+  app.innerHTML = `
+    <h1 class="partyPlanner">Party Planner</h1>
     <main>
-        <section>
+      <section>
         <h2>Upcoming Parties</h2>
-        <div id="partyList"></div>
-        </section>
+        <div id="partyList">
+          ${parties.map((party) => {
+            return `<h3 class="party" data-partyid="${party.id}">${party.name}</h3>`;
+          }).join("")}
+        </div>
+      </section>
 
-        <section>
+      <section>
         <h2>Party Details</h2>
-        <div id="partyDetails"></div>
-        </section>
-    </main>`
-    });
-    parties.innerHTML = html.join("");
-    if(!selectedParty) {
-        //
-    } else {
-        //
-    }
+        <div id="partyDetails">
+          ${
+            !selectedParty
+              ? `<p>Select a party to learn more.</p>`
+              : `<h3>${selectedParty.name}</h3>
+                <p><strong>ID:</strong> ${selectedParty.id}</p>
+                <p><strong>Date:</strong> ${selectedParty.date}</p>
+                <p><strong>Location:</strong> ${selectedParty.location}</p>
+                <p>${selectedParty.description}</p>`
+          }
+        </div>
+      </section>
+    </main>
+  `;
 };
 
 //GET THE PARTIES
 const fetchParties = async () => {
     try {
+        console.log("Fetching parties...")
         const response = await fetch("https://fsa-crud-2aa9294fe819.herokuapp.com/api/COHORT_CODE/events");
         const { data } = await response.json();
-        party = data;
+        console.log(data);
+        parties = data;
+        render();
     } catch (error) {
         console.log(error);
     }
 };
 
 //WHEN USER CLICKS ON A PARTY RENDER ITS INFO
-parties.addEventListener("click", async (event) => {
-    if (event.target.classList.contains("partyPlanner")){
-        await fetchParties(event.target.dataset.partyid);
-        console.log(selectedParty);
+app.addEventListener("click", async (event) => {
+    if (event.target.classList.contains("party")) {
+        const id = event.target.dataset.partyid;
+        await fetchSelectedParty(id);
+        render();
     }
-    render();
 });
 
 //Identify EACH Party by its ID
+const fetchSelectedParty = async (id) => {
+    try {
+        const response = await fetch(`https://fsa-crud-2aa9294fe819.herokuapp.com/api/COHORT_CODE/events/${id}`);
+        const { data } = await response.json();
+        console.log(data);
+        selectedParty = data;
+    } catch (error) {
+        console.log(error)
+    }
+};
 
-render();
+const init = async () => {
+   await fetchParties();
+    render();
+};
+
+init();
+
+// render();
+// fetchParties();
